@@ -1,0 +1,8 @@
+{
+  "name": "find-my-goal",
+  "version": "0.1.0",
+  "description": "零门槛 /goal 起草器：把模糊愿望变成带验收判据、预算和停止条件的强目标文本，交给 /goal 或任何循环命令执行。",
+  "author": { "name": "Kaiji-Z" },
+  "license": "MIT",
+  "skills": "skills"
+}
