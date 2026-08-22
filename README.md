@@ -2,7 +2,19 @@
 
 **会打字，就会用 /goal。**
 
-一句模糊愿望进（"帮我优化项目"），一份带验收判据、范围约束、迭代预算和停止条件的强目标出——粘给你的 `/goal` 跑，不再空转。
+```
+❌ /goal 帮我优化项目
+   → 没判据、没预算、没刹车：循环空转，烧 token，干一半就停
+
+✅ /goal 目标：把 npm test 全量耗时从 baseline 84s 压到 40s 以内，且全部通过
+        范围：只许 src/ 与测试文件；不改公开 API，不装新依赖
+        完成判据：npm test 退出码 0；连跑 3 次每次 ≤ 40s
+        停止条件：需装新依赖；同一思路连续 3 次失败
+        预算：最多 15 轮迭代
+   → 一路跑到证据达标才收工
+```
+
+右边这份不是让你学会写的——是让 find-my-goal 替你写的。你说人话，答几道选择题，它跑 baseline 拿数字，出稿你粘给 `/goal`。
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 [![Skill](https://img.shields.io/badge/type-agent--skill-green)](find-my-goal/SKILL.md)
@@ -19,6 +31,14 @@ git clone https://github.com/Kaiji-Z/find-my-goal ~/.agents/skills/   # ZCode / 
 # 使用（任意会话里，说人话即可）
 帮我写个 goal：把我们小程序启动速度弄快点
 ```
+
+## 它是怎么工作的
+
+```
+你说人话 ──► 至多 3 道选择题（每题可选"你帮我定"）──► 跑 baseline 拿数字 ──► 五段式强目标（等你确认）──► 粘给 /goal
+```
+
+五段式 = 目标 / 范围 / 完成判据 / 停止条件 / 预算。判据必须是可执行命令 + 期望退出码或阈值——"感觉差不多了"不算完成，这是它防止 /goal 空转的全部秘密。
 
 ## Why this exists
 
@@ -101,6 +121,10 @@ skill：（跑完 baseline）现在冷启动 3.2s，我建议压到 1.5s 以内�
 ## 与 [win4r/goal-prompt-builder](https://github.com/win4r/goal-prompt-builder) 的区别
 
 定位致敬（同为 /goal 起草器），差异化三点：**中文交互与产出**（它英文、面向 Codex）；**选择题式追问**（答不出"验证面是什么"也没关系，每题都有"你帮我定"）；**交付格式通用**（原生 /goal、omo /goal、/ralphloop 都能吃）。
+
+## Contributing
+
+正本只有一份：`find-my-goal/SKILL.md`（+ `references/goal-templates.md`）。改完跑 `./sync.sh`，一键同步到本机两个安装位并重新打包 `.skill`。记得用全角引号「」写 frontmatter——ASCII 引号会截断 YAML。
 
 ## FAQ
 

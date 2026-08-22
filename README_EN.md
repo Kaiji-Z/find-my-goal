@@ -2,7 +2,19 @@
 
 **If you can type, you can use /goal.**
 
-Turn a vague wish ("optimize my project") into a strong goal with acceptance criteria, scope constraints, an iteration budget, and stop conditions — then paste it into `/goal` and let it run without spinning.
+```
+❌ /goal optimize my project
+   → no criteria, no budget, no brake: the loop wanders, burns tokens, stalls halfway
+
+✅ /goal Goal: cut full npm test time from baseline 84s to under 40s, all green
+        Scope: only src/ and tests; no public API changes, no new deps
+        Done when: npm test exit 0; 3 consecutive runs each ≤ 40s
+        Stop if: needs new deps; same idea fails 3 times
+        Budget: max 15 iterations
+   → runs until the evidence says done
+```
+
+You don't learn to write the right-hand side — find-my-goal writes it for you. Say it in plain words, answer a few multiple-choice questions, paste the draft into `/goal`.
 
 > 中文说明：[README.md](README.md)
 
