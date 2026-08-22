@@ -22,6 +22,7 @@ You don't learn to write the right-hand side — find-my-goal writes it for you.
 
 ```bash
 # Install (one-time, pick one)
+npx skills add Kaiji-Z/find-my-goal                                   # any agent (skills.sh CLI)
 git clone https://github.com/Kaiji-Z/find-my-goal ~/.claude/skills/   # Claude Code
 git clone https://github.com/Kaiji-Z/find-my-goal ~/.agents/skills/   # ZCode / cross-tool
 

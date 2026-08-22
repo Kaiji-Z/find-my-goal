@@ -24,7 +24,8 @@
 ## TL;DR
 
 ```bash
-# 安装（一次性，二选一）
+# 安装（一次性，任选其一）
+npx skills add Kaiji-Z/find-my-goal                                # 任意 agent（skills.sh CLI）
 git clone https://github.com/Kaiji-Z/find-my-goal ~/.claude/skills/   # Claude Code
 git clone https://github.com/Kaiji-Z/find-my-goal ~/.agents/skills/   # ZCode / 通用跨工具位
 
