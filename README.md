@@ -2,54 +2,35 @@
 
 **会打字，就会用 /goal。**
 
-你的 agent 有 `/goal`（ZCode、Codex、装了 omo 的 opencode……），但你打出的是：
+一句模糊愿望进（"帮我优化项目"），一份带验收判据、范围约束、迭代预算和停止条件的强目标出——粘给你的 `/goal` 跑，不再空转。
+
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+[![Skill](https://img.shields.io/badge/type-agent--skill-green)](find-my-goal/SKILL.md)
+
+> English README: [README_EN.md](README_EN.md)
+
+## TL;DR
+
+```bash
+# 安装（一次性，二选一）
+git clone https://github.com/Kaiji-Z/find-my-goal ~/.claude/skills/   # Claude Code
+git clone https://github.com/Kaiji-Z/find-my-goal ~/.agents/skills/   # ZCode / 通用跨工具位
+
+# 使用（任意会话里，说人话即可）
+帮我写个 goal：把我们小程序启动速度弄快点
+```
+
+## Why this exists
+
+ZCode、Codex（0.128+）和装了 omo 的 opencode 都有 `/goal`——内核级的持久目标循环，空闲自动续跑，直到目标达成。很好，除了一个问题：
 
 ```
 /goal 帮我优化项目
 ```
 
-——然后它空转、烧 token、干完一半就停。问题不在 /goal，在于这是一句**愿望**，不是**规格**。本 skill 把愿望翻译成规格：你只管说人话、答几道选择题，它产出一份带验收判据、范围约束、迭代预算和停止条件的强目标，你粘给 /goal 跑。
+这是愿望，不是规格。没有验收判据、没有预算、没有停止条件，循环只能瞎转或干一半就停。官方教程教你写"六要素强 Goal"——但普通用户不该为了用一条命令去学一门 prompt 课。
 
-> **口诀：先写后跑。** 别直接打 `/goal`，先说"帮我写个 goal"，拿到成品再 `/goal` 粘贴执行。
-
-## 它做什么 / 不做什么
-
-- ✅ 把"帮我优化项目"起草成"把 `npm test` 全量耗时从 baseline 84s 压到 40s 以内，且全部通过（最多 15 轮，卡住就停）"
-- ✅ 从已有讨论中收割目标（"按刚才讨论的设个目标"），只补缺的项，最多问你一两道选择题
-- ✅ 体检已写好的 goal（"我的 goal 在空转"→ 逐条补判据、预算、刹车）
-- ✅ 你的 agent 没有 /goal？说一声，它直接在当前会话按目标循环执行
-- ❌ 不替代 /goal 的运行时（持久状态、自动续跑、完成校验是 agent 内核的事，不重复造）
-- ❌ 不含"目标/goal"字样的普通请求不触发，不和其他 skill 撞车
-
-## 安装
-
-**ZCode / 任何认 `~/.agents/skills/` 的 agent（推荐）：**
-
-```bash
-git clone https://github.com/Kaiji-Z/find-my-goal ~/.agents/skills/find-my-goal
-```
-
-**Claude Code：**
-
-```bash
-git clone https://github.com/Kaiji-Z/find-my-goal ~/.claude/skills/find-my-goal
-```
-
-Windows（Git Bash）同命令；PowerShell 用户把 `~` 换成 `$HOME`。
-
-装完新开会话即可，无需配置。
-
-## 用法
-
-三句话，覆盖 90% 场景：
-
-| 你说 | 它做 |
-|---|---|
-| "帮我写个 goal：把我们小程序启动速度弄快点" | 追问 1-3 道选择题（每题都有"你帮我定"选项），跑 baseline 拿数字，出稿等你确认 |
-| "按刚才讨论的方向设个目标" | 从对话里收割方向/范围/已有数字，只补缺的项 |
-| "我的 goal 一直在空转" | 按硬规则体检重写，提醒清掉旧目标重新 /goal |
-
-出稿长这样（各家 /goal、/loop、/ralphloop 通用）：
+**find-my-goal 把这门课装进 skill 里**：你答几道选择题（每题都有"你帮我定"选项），它跑 baseline 拿数字，产出这样一份目标：
 
 ```
 目标：把 npm test 全量耗时从 baseline 84s 压到 40s 以内，且全部通过
@@ -59,20 +40,76 @@ Windows（Git Bash）同命令；PowerShell 用户把 `~` 换成 `$HOME`。
 预算：最多 15 轮迭代
 ```
 
+这份格式对任何循环命令通用：原生 `/goal`、omo 的 `/goal`、`/ralphloop`。
+
+## What you get
+
+| 文件 | 用途 |
+|---|---|
+| [`find-my-goal/SKILL.md`](find-my-goal/SKILL.md) | 意图路由 + 三道选择题追问（验收/边界/预算）+ baseline 定判据 + 弱目标体检 |
+| [`find-my-goal/references/goal-templates.md`](find-my-goal/references/goal-templates.md) | 5 个场景模板：性能优化 / flaky test / 批量任务 / 规格驱动 / 考古研究 |
+
+## Installation
+
+**Option 1：一行安装（推荐）**——见 TL;DR，clone 整个仓库到 skills 目录，`find-my-goal/SKILL.md` 自动落位。
+
+**Option 2：.skill 文件（Claude Desktop / Claude.ai）**——下载 [find-my-goal.skill](find-my-goal.skill)（zip 格式），解压到 skills 目录，或在 Claude Desktop 里拖拽安装：
+
+```bash
+curl -L -o /tmp/find-my-goal.skill https://github.com/Kaiji-Z/find-my-goal/raw/main/find-my-goal.skill
+unzip -o /tmp/find-my-goal.skill -d ~/.claude/skills/
+```
+
+装完新开会话即可，无需配置。
+
+## Usage
+
+三个入口，一句话一个：
+
+| 你说 | 它做 |
+|---|---|
+| "帮我写个 goal：把我们小程序启动速度弄快点" | 追问 1-3 道选择题，跑 baseline 拿数字，出稿等你确认 |
+| "按刚才讨论的方向设个目标" | 从对话收割方向/范围/已有数字，只补缺的项 |
+| "我的 goal 一直在空转" | 按硬规则体检重写，提醒清掉旧目标重新 /goal |
+
+典型会话：
+
+```
+你：帮我写个 goal：把我们小程序启动速度弄快点
+skill：做到什么程度算完成？
+       A. 我先看看项目现状，提一个能验证的标准给你确认
+       B. 我直接告诉你
+       C. 说不清，你定个保守的
+你：A
+skill：（跑完 baseline）现在冷启动 3.2s，我建议压到 1.5s 以内，
+       判据是 `npm run build && npm test` 全绿 + 模拟器冷启动 ≤1.5s，
+       最多 15 轮，卡住就停。确认后粘给 /goal 执行——出稿：
+
+       目标：把小程序冷启动从 baseline 3.2s 压到 1.5s 以内
+       范围：……
+```
+
+> **口诀：先写后跑。** 别直接打 `/goal 弱目标`（内核会立刻执行，skill 拦不到）；先让 skill 写好，再 `/goal` 粘贴。
+
 ## 设计原则
 
 1. **证据完成**：判据必须可执行（命令 + 退出码/阈值），"感觉差不多了"不算。
 2. **有刹车**：预算和停止条件必填——没有刹车的长跑目标会烧掉你的钱。
-3. **人是开关**：未经你确认不定稿；目标文本自包含（不怕上下文压缩、换会话）。
+3. **人是开关**：未经确认不定稿；目标文本自包含，不怕上下文压缩、换会话。
+4. **不越界**：不检测你的 agent 有没有 /goal、不模拟运行时——起草归 skill，循环归内核。
 
-## 与 goal-prompt-builder 的区别
+## 与 [win4r/goal-prompt-builder](https://github.com/win4r/goal-prompt-builder) 的区别
 
-同为 /goal 起草器（定位致敬 win4r/goal-prompt-builder），差异化三点：中文交互与中文产出；选择题式追问（答不出"验证面是什么"也没关系，每题都有"你帮我定"）；交付格式对任何循环命令通用（原生 /goal、omo /goal、/ralphloop）。
+定位致敬（同为 /goal 起草器），差异化三点：**中文交互与产出**（它英文、面向 Codex）；**选择题式追问**（答不出"验证面是什么"也没关系，每题都有"你帮我定"）；**交付格式通用**（原生 /goal、omo /goal、/ralphloop 都能吃）。
 
-## 插件市场提交
+## FAQ
 
-`plugin/` 目录是 ZCode / Claude Code 插件市场格式（`.zcode-plugin/plugin.json` + `skills/`），可整目录提交到 marketplace 仓库。修改 skill 后记得跑 `./sync-plugin.sh` 同步双份。
+**我的 agent 没有 /goal，能用吗？** 能。装了它，说"设个目标"照样走起草流程；出稿后说一声"我没有 /goal"，它直接在当前会话按目标循环执行（每轮验证判据，达标才收工）。
+
+**会误触发吗？** 只认消息中的"目标/goal"字样。单纯的"帮我优化项目"不会触发，不和其他 skill 撞车。
+
+**支持哪些 agent？** 任何支持 skills 目录标准的：Claude Code、ZCode、opencode，以及支持 .skill 文件的 Claude Desktop / Claude.ai。Codex CLI 用户不需要装它——把 README 里那份交付格式抄去写目标即可。
 
 ## License
 
-MIT
+[MIT](LICENSE) © Kaiji-Z
