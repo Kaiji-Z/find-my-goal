@@ -1,139 +1,102 @@
 # find-my-goal
 
-**会打字，就会用 /goal。**
+**If you can type, you can use /goal.** · [中文说明](README.zh-CN.md)
 
 ```
-❌ /goal 帮我优化项目
-   → 没判据、没预算、没刹车：循环空转，烧 token，干一半就停
+❌ /goal optimize my project
+   → no criteria, no budget, no brake: the loop wanders, burns tokens, stalls halfway
 
-✅ /goal 目标：把 npm test 全量耗时从 baseline 84s 压到 40s 以内，且全部通过
-        范围：只许 src/ 与测试文件；不改公开 API，不装新依赖
-        完成判据：npm test 退出码 0；连跑 3 次每次 ≤ 40s
-        停止条件：需装新依赖；同一思路连续 3 次失败
-        预算：最多 15 轮迭代
-   → 一路跑到证据达标才收工
+✅ /goal Goal: cut full npm test time from baseline 84s to under 40s, all green
+        Scope: only src/ and tests; no public API changes, no new deps
+        Done when: npm test exit 0; 3 consecutive runs each ≤ 40s
+        Stop if: needs new deps; same idea fails 3 times
+        Budget: max 15 iterations
+   → runs until the evidence says done
 ```
 
-右边这份不是让你学会写的——是让 find-my-goal 替你写的。你说人话，答几道选择题，它跑 baseline 拿数字，出稿你粘给 `/goal`。
+You don't learn to write the right-hand side — find-my-goal writes it for you. Say it in plain words, answer a few multiple-choice questions, paste the draft into `/goal`. Works in English or Chinese.
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 [![Skill](https://img.shields.io/badge/type-agent--skill-green)](find-my-goal/SKILL.md)
 
-> English README: [README_EN.md](README_EN.md)
-
 ## TL;DR
 
 ```bash
-# 安装（一次性，任选其一）
-npx skills add Kaiji-Z/find-my-goal                                # 任意 agent（skills.sh CLI）
+# Install (one-time, pick one)
+npx skills add Kaiji-Z/find-my-goal                                   # any agent (skills.sh CLI)
 git clone https://github.com/Kaiji-Z/find-my-goal ~/.claude/skills/   # Claude Code
-git clone https://github.com/Kaiji-Z/find-my-goal ~/.agents/skills/   # ZCode / 通用跨工具位
+git clone https://github.com/Kaiji-Z/find-my-goal ~/.agents/skills/   # ZCode / cross-tool
 
-# 使用（任意会话里，说人话即可）
-帮我写个 goal：把我们小程序启动速度弄快点
+# Use (in any session, plain language)
+Help me write a goal: make our mini-app start faster
 ```
 
-## 它是怎么工作的
+## How it works
 
 ```
-你说人话 ──► 至多 3 道选择题（每题可选"你帮我定"）──► 跑 baseline 拿数字 ──► 五段式强目标（等你确认）──► 粘给 /goal
+you speak plainly ──► at most 3 multiple-choice questions (every one has a "you decide" option)
+──► a baseline run for real numbers ──► a five-part strong goal (awaits your confirmation)
+──► paste into /goal
 ```
 
-五段式 = 目标 / 范围 / 完成判据 / 停止条件 / 预算。判据必须是可执行命令 + 期望退出码或阈值——"感觉差不多了"不算完成，这是它防止 /goal 空转的全部秘密。
+The five parts = Goal / Scope / Done-when / Stop-if / Budget. Criteria must be an executable command + expected exit code or threshold — "feels done" doesn't count. That is the entire secret of stopping /goal from spinning.
 
 ## Why this exists
 
-ZCode、Codex（0.128+）和装了 omo 的 opencode 都有 `/goal`——内核级的持久目标循环，空闲自动续跑，直到目标达成。很好，除了一个问题：
+ZCode, Codex (0.128+) and opencode-with-omo all have `/goal` — a kernel-level persistent goal loop that auto-continues until the goal is verifiably done. Great, except:
 
 ```
-/goal 帮我优化项目
+/goal optimize my project
 ```
 
-这是愿望，不是规格。没有验收判据、没有预算、没有停止条件，循环只能瞎转或干一半就停。官方教程教你写"六要素强 Goal"——但普通用户不该为了用一条命令去学一门 prompt 课。
-
-**find-my-goal 把这门课装进 skill 里**：你答几道选择题（每题都有"你帮我定"选项），它跑 baseline 拿数字，产出这样一份目标：
-
-```
-目标：把 npm test 全量耗时从 baseline 84s 压到 40s 以内，且全部通过
-范围：只许 src/ 与测试文件、构建配置；不改公开 API 行为，不装新依赖
-完成判据：npm test 退出码 0 且全绿；连跑 3 次每次耗时 ≤ 40s
-停止条件：需要装新依赖或换运行时；同一优化思路连续 3 次无效
-预算：最多 15 轮迭代
-```
-
-这份格式对任何循环命令通用：原生 `/goal`、omo 的 `/goal`、`/ralphloop`。
+That's a wish, not a spec. No criteria, no budget, no stop conditions — the loop wanders. Official guides teach the "six elements of a strong goal", but ordinary users shouldn't have to take a prompt-writing course to use one command. **find-my-goal puts the course inside the skill.**
 
 ## What you get
 
-| 文件 | 用途 |
+| File | Purpose |
 |---|---|
-| [`find-my-goal/SKILL.md`](find-my-goal/SKILL.md) | 意图路由 + 三道选择题追问（验收/边界/预算）+ baseline 定判据 + 弱目标体检 |
-| [`find-my-goal/references/goal-templates.md`](find-my-goal/references/goal-templates.md) | 5 个场景模板：性能优化 / flaky test / 批量任务 / 规格驱动 / 考古研究 |
+| [`find-my-goal/SKILL.md`](find-my-goal/SKILL.md) | Intent routing + 3 multiple-choice questions (acceptance / boundaries / budget) + baseline-driven criteria + weak-goal audits — bilingual EN/中文 |
+| [`find-my-goal/references/goal-templates.md`](find-my-goal/references/goal-templates.md) | 5 scenario templates: performance / flaky test / batch / spec-driven / research — bilingual |
 
 ## Installation
 
-**Option 1：一行安装（推荐）**——见 TL;DR，clone 整个仓库到 skills 目录，`find-my-goal/SKILL.md` 自动落位。
+**Option 1: one line (recommended)** — see TL;DR; clone the repo into your skills directory and `find-my-goal/SKILL.md` lands in place.
 
-**Option 2：.skill 文件（Claude Desktop / Claude.ai）**——下载 [find-my-goal.skill](find-my-goal.skill)（zip 格式），解压到 skills 目录，或在 Claude Desktop 里拖拽安装：
+**Option 2: .skill file (Claude Desktop / Claude.ai)** — download [find-my-goal.skill](find-my-goal.skill) (zip format), unzip into your skills directory, or drag-install in Claude Desktop:
 
 ```bash
 curl -L -o /tmp/find-my-goal.skill https://github.com/Kaiji-Z/find-my-goal/raw/main/find-my-goal.skill
 unzip -o /tmp/find-my-goal.skill -d ~/.claude/skills/
 ```
 
-装完新开会话即可，无需配置。
+Open a fresh session after installing. No configuration needed.
 
 ## Usage
 
-三个入口，一句话一个：
+Three entrances, one sentence each (English or Chinese):
 
-| 你说 | 它做 |
+| You say | It does |
 |---|---|
-| "帮我写个 goal：把我们小程序启动速度弄快点" | 追问 1-3 道选择题，跑 baseline 拿数字，出稿等你确认 |
-| "按刚才讨论的方向设个目标" | 从对话收割方向/范围/已有数字，只补缺的项 |
-| "我的 goal 一直在空转" | 按硬规则体检重写，提醒清掉旧目标重新 /goal |
+| "Help me write a goal: make our mini-app start faster" | Asks 1-3 multiple-choice questions, runs a baseline for numbers, drafts for your confirmation |
+| "Set a goal based on what we just discussed" | Harvests direction/scope/numbers from the conversation, fills only the gaps |
+| "My goal keeps spinning" | Audits against hard rules, rewrites, reminds you to clear and re-set /goal |
 
-典型会话：
+> **Mantra: draft first, run later.** Don't paste a weak goal straight into `/goal` — the kernel executes it before any skill can help; let the skill write it first.
 
-```
-你：帮我写个 goal：把我们小程序启动速度弄快点
-skill：做到什么程度算完成？
-       A. 我先看看项目现状，提一个能验证的标准给你确认
-       B. 我直接告诉你
-       C. 说不清，你定个保守的
-你：A
-skill：（跑完 baseline）现在冷启动 3.2s，我建议压到 1.5s 以内，
-       判据是 `npm run build && npm test` 全绿 + 模拟器冷启动 ≤1.5s，
-       最多 15 轮，卡住就停。确认后粘给 /goal 执行——出稿：
+## Design principles
 
-       目标：把小程序冷启动从 baseline 3.2s 压到 1.5s 以内
-       范围：……
-```
+1. **Evidence-based completion**: criteria must be executable (command + exit code / threshold). "Feels done" doesn't count.
+2. **Always a brake**: budget and stop conditions are mandatory — a goal without brakes burns your money.
+3. **Human is the switch**: no final draft without your confirmation; goal text is self-contained across compaction and sessions.
+4. **No overreach**: never detects whether /goal exists, never emulates the runtime — drafting belongs to the skill, looping belongs to the kernel.
 
-> **口诀：先写后跑。** 别直接打 `/goal 弱目标`（内核会立刻执行，skill 拦不到）；先让 skill 写好，再 `/goal` 粘贴。
+## vs [win4r/goal-prompt-builder](https://github.com/win4r/goal-prompt-builder)
 
-## 设计原则
-
-1. **证据完成**：判据必须可执行（命令 + 退出码/阈值），"感觉差不多了"不算。
-2. **有刹车**：预算和停止条件必填——没有刹车的长跑目标会烧掉你的钱。
-3. **人是开关**：未经确认不定稿；目标文本自包含，不怕上下文压缩、换会话。
-4. **不越界**：不检测你的 agent 有没有 /goal、不模拟运行时——起草归 skill，循环归内核。
-
-## 与 [win4r/goal-prompt-builder](https://github.com/win4r/goal-prompt-builder) 的区别
-
-定位致敬（同为 /goal 起草器），差异化三点：**中文交互与产出**（它英文、面向 Codex）；**选择题式追问**（答不出"验证面是什么"也没关系，每题都有"你帮我定"）；**交付格式通用**（原生 /goal、omo /goal、/ralphloop 都能吃）。
+Same positioning (an /goal drafter — credit where due), three differences: **bilingual interaction** (it is English-only, aimed at Codex); **multiple-choice questioning** (every question has a "you decide" option — no prompt-engineering knowledge required); **universal delivery format** (native /goal, omo's /goal, /ralphloop all consume it).
 
 ## Contributing
 
-正本只有一份：`find-my-goal/SKILL.md`（+ `references/goal-templates.md`）。改完跑 `./sync.sh`，一键同步到本机两个安装位并重新打包 `.skill`。记得用全角引号「」写 frontmatter——ASCII 引号会截断 YAML。
-
-## FAQ
-
-**我的 agent 没有 /goal，能用吗？** 能。装了它，说"设个目标"照样走起草流程；出稿后说一声"我没有 /goal"，它直接在当前会话按目标循环执行（每轮验证判据，达标才收工）。
-
-**会误触发吗？** 只认消息中的"目标/goal"字样。单纯的"帮我优化项目"不会触发，不和其他 skill 撞车。
-
-**支持哪些 agent？** 任何支持 skills 目录标准的：Claude Code、ZCode、opencode，以及支持 .skill 文件的 Claude Desktop / Claude.ai。Codex CLI 用户不需要装它——把 README 里那份交付格式抄去写目标即可。
+One source of truth: `find-my-goal/SKILL.md` (+ `references/goal-templates.md`). After editing, run `./sync.sh` to sync both local install locations and repackage the `.skill` file. Use fullwidth quotes 「」 in frontmatter — ASCII quotes truncate YAML.
 
 ## License
 
