@@ -119,10 +119,6 @@ skill：（跑完 baseline）现在冷启动 3.2s，我建议压到 1.5s 以内�
 3. **人是开关**：未经确认不定稿；目标文本自包含，不怕上下文压缩、换会话。
 4. **不越界**：不检测你的 agent 有没有 /goal、不模拟运行时——起草归 skill，循环归内核。
 
-## 与 [win4r/goal-prompt-builder](https://github.com/win4r/goal-prompt-builder) 的区别
-
-定位致敬（同为 /goal 起草器），差异化三点：**中文交互与产出**（它英文、面向 Codex）；**选择题式追问**（答不出"验证面是什么"也没关系，每题都有"你帮我定"）；**交付格式通用**（原生 /goal、omo /goal、/ralphloop 都能吃）。
-
 ## Contributing
 
 正本只有一份：`find-my-goal/SKILL.md`（+ `references/goal-templates.md`）。改完跑 `./sync.sh`，一键同步到本机两个安装位并重新打包 `.skill`。记得用全角引号「」写 frontmatter——ASCII 引号会截断 YAML。

@@ -83,6 +83,23 @@ Three entrances, one sentence each (English or Chinese):
 
 > **Mantra: draft first, run later.** Don't paste a weak goal straight into `/goal` — the kernel executes it before any skill can help; let the skill write it first.
 
+A typical session:
+
+```
+You: Help me write a goal: make our mini-app start faster
+Skill: What counts as done?
+       A. I'll look at the project and propose a verifiable standard for your confirmation
+       B. I'll tell you directly
+       C. Can't say — you pick a conservative one
+You: A
+Skill: (runs a baseline) Cold start is currently 3.2s; I suggest under 1.5s,
+       criteria: `npm run build && npm test` green + cold start ≤ 1.5s on the emulator,
+       max 15 rounds, stops and asks if stuck. Confirm to hand to /goal — draft:
+
+       Goal: cut mini-app cold start from baseline 3.2s to under 1.5s
+       Scope: ...
+```
+
 ## Design principles
 
 1. **Evidence-based completion**: criteria must be executable (command + exit code / threshold). "Feels done" doesn't count.
@@ -90,9 +107,13 @@ Three entrances, one sentence each (English or Chinese):
 3. **Human is the switch**: no final draft without your confirmation; goal text is self-contained across compaction and sessions.
 4. **No overreach**: never detects whether /goal exists, never emulates the runtime — drafting belongs to the skill, looping belongs to the kernel.
 
-## vs [win4r/goal-prompt-builder](https://github.com/win4r/goal-prompt-builder)
+## FAQ
 
-Same positioning (an /goal drafter — credit where due), three differences: **bilingual interaction** (it is English-only, aimed at Codex); **multiple-choice questioning** (every question has a "you decide" option — no prompt-engineering knowledge required); **universal delivery format** (native /goal, omo's /goal, /ralphloop all consume it).
+**No /goal in my agent?** Still works — tell it so, and it executes the goal in the current session (verify criteria each round, stop only when all pass).
+
+**False triggers?** Only fires on messages containing "goal"-like words (goal / 目标). A plain "optimize my project" won't trigger it.
+
+**Which agents?** Anything with a skills directory: Claude Code, ZCode, opencode, plus Claude Desktop / Claude.ai via the `.skill` file. Codex CLI users don't need it — just reuse the delivery format above.
 
 ## Contributing
 
