@@ -49,7 +49,7 @@ ZCode、Codex（0.128+）和装了 omo 的 opencode 都有 `/goal`——内核�
 /goal 帮我优化项目
 ```
 
-这是愿望，不是规格。没有验收判据、没有预算、没有停止条件，循环只能瞎转或干一半就停。官方教程教你写"六要素强 Goal"——但普通用户不该为了用一条命令去学一门 prompt 课。
+这是愿望，不是规格。没有验收判据、没有预算、没有停止条件，循环只能瞎转或干一半就停。官方教程——[Using Goals in Codex（OpenAI 开发者 Cookbook）](https://developers.openai.com/cookbook/examples/codex/using_goals_in_codex)——教的是"六要素强 Goal"，本 skill 的五段式正是从这套官方推荐方法中提炼的，你不用自己去学：**find-my-goal 把这门课装进了 skill 里。**
 
 **find-my-goal 把这门课装进 skill 里**：你答几道选择题（每题都有"你帮我定"选项），它跑 baseline 拿数字，产出这样一份目标：
 

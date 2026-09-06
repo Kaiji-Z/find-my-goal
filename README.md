@@ -49,7 +49,7 @@ ZCode, Codex (0.128+) and opencode-with-omo all have `/goal` — a kernel-level 
 /goal optimize my project
 ```
 
-That's a wish, not a spec. No criteria, no budget, no stop conditions — the loop wanders. Official guides teach the "six elements of a strong goal", but ordinary users shouldn't have to take a prompt-writing course to use one command. **find-my-goal puts the course inside the skill.**
+That's a wish, not a spec. No criteria, no budget, no stop conditions — the loop wanders. The official guide — [Using Goals in Codex](https://developers.openai.com/cookbook/examples/codex/using_goals_in_codex) (OpenAI Developer Cookbook) — teaches the "six elements of a strong goal". This skill's five-part format is distilled from that officially recommended practice, so you never have to learn it: **find-my-goal puts the course inside the skill.**
 
 ## What you get
 
